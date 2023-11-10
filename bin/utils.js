@@ -13,7 +13,6 @@ module.exports = {
                     data = file.toString().replace(replacer[i], scripts[i]);
                 }
                 data = data.toString().replace(replacer[i], scripts[i]);
-                console.log(data);
             }
             fs.writeFile(path, data, (err) => err || true);
         });
