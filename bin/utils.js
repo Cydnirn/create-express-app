@@ -1,9 +1,10 @@
 const { exec } = require("child_process");
 const fs = require("fs-extra");
 const path = require("path");
+const https = require("https");
 
 module.exports = {
-    readPackageJson: (path, scripts) => {
+    readPackageJson: ( path, scripts) => {
         fs.readFile(path, (err, file) => {
             if (err) throw err;
             const data = file
@@ -12,18 +13,19 @@ module.exports = {
                     '"test": "echo \\"Error: no test specified\\" && exit 1"',
                     scripts
                 );
+            console.log(data);
             fs.writeFile(path, data, (err) => err || true);
         });
     },
-    fileCopyWrite: (files) => {
+    fileCopyWrite: (files, dir) => {
         for (const file of files) {
             fs.createReadStream(path.join(__dirname, `../${file}`)).pipe(
-                fs.createWriteStream(`./${file}`)
+                fs.createWriteStream(!dir ? `./${file}` : `${dir}/${file}`)
             );
         }
     },
-    httpsWrite: (url) => {
-        this.httpsWrite.length(link, (res) => {
+    httpsWrite: (url, dir) => {
+        https.get(url, (res) => {
             res.setEncoding("utf8");
             let body = "";
             res.on("data", (data) => {
@@ -31,7 +33,7 @@ module.exports = {
             });
             res.on("end", () => {
                 fs.writeFile(
-                    `./.gitignore`,
+                    !dir ? `./.gitignore` : `${dir}/.gitignore`,
                     body,
                     { encoding: "utf-8" },
                     (err) => {
@@ -41,9 +43,11 @@ module.exports = {
             });
         });
     },
-    npmInstall: (devDeps, deps) => {
+    npmInstall: (devDeps, deps, dir) => {
         exec(
-            `git init && node -v && npm -v && npm i -D ${devDeps} && npm i -S ${deps}`,
+            !dir
+                ? `git init && node -v && npm -v && npm i -D ${devDeps} && npm i -S ${deps}`
+                : `cd ${dir} && git init && node -v && npm -v && npm i -D ${devDeps} && npm i -S ${deps}`,
             (npmErr, npmStdout, npmStderr) => {
                 if (npmErr) {
                     console.error(`Some error while installing dependencies
@@ -55,12 +59,13 @@ module.exports = {
 
                 console.log("Copying additional files..");
                 // copy additional source files
-                fs.copy(path.join(__dirname, "../src"), `./src`).catch((err) =>
-                    console.error(err)
-                );
+                fs.copy(
+                    path.join(__dirname, "../src"),
+                    !dir ? `./src` : `${dir}/src`
+                ).catch((err) => console.error(err));
 
                 console.log(
-                    `All done!\n\nYour project is now ready\n\nUse the below command to run the app.\n\nnpm start`
+                    `All done!\n\nYour project is now ready\n\nUse the below command to run the app.\n\nnpm run dev`
                 );
             }
         );
