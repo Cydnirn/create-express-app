@@ -5,13 +5,26 @@ const { exec } = require("child_process");
 const utils = require("./utils");
 
 const packageJson = require("../package.json");
-const path = require("path");
 
 const scripts = `"test": "nyc ts-mocha -p tsconfig.json src/test/*.spec.ts",
 "dev-build": "node update-dev-import.js",
 "dev": " npm run dev-build && NODE_ENV=development nodemon ./src/app.ts",
 "build": "tsc && node update-build-import.js",
-"start": "npm run build && pm2 start ./dist/app.js"`;
+"start": "npm run build && pm2 start ./dist/app.js",
+ "stop": "pm2 delete app"`;
+
+const imports = `
+"imports": {
+    "#models/*": "./dist/models/*.js",
+    "#routes/*": "./dist/routes/*.js",
+    "#controllers/*": "./dist/controllers/*.js",
+    "#utils/*": "./dist/utils/*.js",
+    "#class/*": "./dist/class/*.js",
+    "#events/*": "./dist/events/*.js",
+    "#config/*": "./dist/config/*.js",
+    "#loaders/*": "./dist/loaders/*.js"
+  },
+`;
 
 const getDeps = (deps) =>
     Object.entries(deps)
@@ -30,7 +43,14 @@ function main(initErr, initStdout, initStderr, dir) {
         return;
     }
     const packagePath = !dir ? "./package.json" : `${dir}/package.json`;
-    utils.readPackageJson(packagePath, scripts);
+    const scriptReplace =
+        '"test": "echo \\"Error: no test specified\\" && exit 1"';
+    const importReplace = `"keywords": [],`;
+    utils.readPackageJson(
+        packagePath,
+        [scripts, imports],
+        [scriptReplace, importReplace]
+    );
 
     const filesCopy = [
         "tsconfig.json",

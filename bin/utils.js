@@ -4,16 +4,17 @@ const path = require("path");
 const https = require("https");
 
 module.exports = {
-    readPackageJson: ( path, scripts) => {
+    readPackageJson: (path, scripts, replacer) => {
         fs.readFile(path, (err, file) => {
             if (err) throw err;
-            const data = file
-                .toString()
-                .replace(
-                    '"test": "echo \\"Error: no test specified\\" && exit 1"',
-                    scripts
-                );
-            console.log(data);
+            let data = "";
+            for (let i = 0; i < scripts.length; i++) {
+                if (i == 0) {
+                    data = file.toString().replace(replacer[i], scripts[i]);
+                }
+                data = data.toString().replace(replacer[i], scripts[i]);
+                console.log(data);
+            }
             fs.writeFile(path, data, (err) => err || true);
         });
     },
