@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response, Router } from "express";
 import Controller from "#controllers/basicController";
 import Respond from "#utils/Respond";
+import validate from "#utils/Validation";
+import { body } from "express-validator";
 
 const ControllerInstance = new Controller();
 
@@ -17,5 +19,21 @@ export default function basicRoutes() {
             }
         })(req, res, next);
     });
+    router
+        .route("/validate")
+        .post(
+            validate([body("username").trim().isString().notEmpty()]),
+            (req: Request, res: Response, next: NextFunction) => {
+                try {
+                    return Respond.OK(
+                        res,
+                        `Your username is ${req.body.username}`,
+                        null
+                    );
+                } catch (err) {
+                    next(err);
+                }
+            }
+        );
     return router;
 }

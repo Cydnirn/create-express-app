@@ -27,10 +27,16 @@ export default function expressLoader(app: Application) {
             })
         );
         app.enable("trust proxy");
+        
         app.get("/", (req: Request, res: Response, next: NextFunction) => {
             Respond.OK(res, "Healthy", null);
         });
+
         app.use("/api", rootRoutes());
+
+        app.use((req: Request, res: Response) => {
+            return Respond.NOT_FOUND(res, "URI Not exist", null);
+        });
 
         app.use((err: any, req: Request, res: Response, next: NextFunction) => {
             if (!fs.existsSync("/log")) {
@@ -39,7 +45,7 @@ export default function expressLoader(app: Application) {
             if (res.headersSent) {
                 return next(err);
             }
-            res.status(500).json("Hello");
+            Respond.INTERNAL_ERR(res, null, null);
         });
         return app;
     })(app);

@@ -10,7 +10,7 @@
             "#routes/*":["src/routes/*"],
             "#controllers/*":["src/controllers/*"],
             "#utils/*": ["src/utils/*"],
-            "#class/*": ["src/class/*"],
+            "#types/*": ["src/types/*"],
             "#events/*" : ["src/events/*"],
             "#config/*": ["src/config/*"],
             "#loaders/*": ["src/loaders/*"],

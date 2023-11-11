@@ -15,6 +15,7 @@ const ExecuteServer = (server: http.Server, port?: number) => {
 const StartServer = () => {
     (async (app: Application) => {
         await loader(app);
+        console.log(env.ORIGIN);
         const server = http.createServer(app);
         if (env.NODE_ENV === "production") {
             ExecuteServer(server, 3002);

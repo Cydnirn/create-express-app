@@ -14,5 +14,6 @@ export default function rootRoutes() {
         }
     });
     router.use("/hello", basicRoutes());
+    
     return router;
 }
