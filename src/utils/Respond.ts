@@ -3,17 +3,22 @@ import { Response } from "express";
 type dataType = any[] | object | object[] | null;
 
 export default class Respond {
+    private static instance: Respond;
     private HTTPStatus = {
         OK: 200,
+        CREATED: 201,
+        ACCEPTED: 202,
+        BAD_REQ: 400,
+        UNAUTH: 401,
+        FORBIDDEN: 403,
+        NOT_FOUND: 404,
     };
 
-    private ResponseInstance = Response;
-
-    public getResponse() {
-        if (!this.ResponseInstance) {
-            return new Respond();
+    public static getResponse() {
+        if (!Respond.instance) {
+            Respond.instance = new Respond();
         }
-        return new Respond();
+        return Respond.instance;
     }
 
     private dataConsumer(data: dataType) {
@@ -38,11 +43,21 @@ export default class Respond {
     }
 
     public static OK(res: Response, message: string, data: dataType) {
-        const response = new Respond().getResponse();
-        console.log("Here");
+        const response = Respond.getResponse();
         return response.ResponseString(
             res,
             response.HTTPStatus.OK,
+            true,
+            message,
+            data
+        );
+    }
+
+    public static CREATED(res: Response, message: string, data: dataType) {
+        const response = Respond.getResponse();
+        return response.ResponseString(
+            res,
+            response.HTTPStatus.CREATED,
             true,
             message,
             data
