@@ -4,6 +4,8 @@ A Boilerplate build by [Cydnirn](https://github.com/Cydnirn) for creating Expres
 
 Packed with Typescript, Express essential for running behind nginx, express validator, and testing essential using mocha
 
+To use simply run ```npx i create-express-zen```
+
 # Folder Explanation
 
 ## App.ts
