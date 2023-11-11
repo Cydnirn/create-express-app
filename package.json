@@ -1,6 +1,6 @@
 {
   "name": "create-express-zen",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Boilerplate for express following the bulletproof node.js project architecture (https://dev.to/santypk4/bulletproof-node-js-project-architecture-4epf)",
   "main": "index.js",
   "scripts": {
