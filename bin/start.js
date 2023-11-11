@@ -60,6 +60,9 @@ function main(initErr, initStdout, initStderr, dir) {
         ".gitignore",
         ".dockerignore",
         "Readme.md",
+        ".env.production",
+        ".env.development",
+        "Readme.md",
     ];
 
     utils.fileCopyWrite(filesCopy, dir);
