@@ -57,7 +57,6 @@ function main(initErr, initStdout, initStderr, dir) {
         "update-dev-import.js",
         "update-build-import.js",
         "Dockerfile",
-        ".gitignore",
         ".dockerignore",
         "Readme.md",
         ".env.production",
@@ -66,6 +65,8 @@ function main(initErr, initStdout, initStderr, dir) {
     ];
 
     utils.fileCopyWrite(filesCopy, dir);
+
+    utils.fileCopyRename(".gitignore.template", ".gitignore", dir);
 
     /*
     utils.httpsWrite(

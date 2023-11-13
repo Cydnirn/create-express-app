@@ -24,6 +24,13 @@ module.exports = {
             );
         }
     },
+    fileCopyRename: (file, fileRename, dir) => {
+        fs.createReadStream(path.join(__dirname, `../${file}`)).pipe(
+            fs.createWriteStream(
+                !dir ? `./${fileRename}` : `${dir}/${fileRename}`
+            )
+        );
+    },
     httpsWrite: (url, dir) => {
         https.get(url, (res) => {
             res.setEncoding("utf8");
