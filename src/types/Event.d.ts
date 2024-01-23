@@ -1,1 +1,3 @@
-declare interface IAppEvent {}
+declare interface IAppEvent {
+    event: () => void;
+}

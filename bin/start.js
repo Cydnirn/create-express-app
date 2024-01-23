@@ -4,7 +4,7 @@ const { exec } = require("child_process");
 
 const utils = require("./utils");
 
-const packageJson = require("../package.json");
+const packageJson = require("./package.json");
 
 const scripts = `"test": "nyc ts-mocha -p tsconfig.json src/test/*.spec.ts",
 "dev-build": "node update-dev-import.js",
